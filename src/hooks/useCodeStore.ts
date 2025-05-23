@@ -85,6 +85,7 @@ interface CodeState {
   setActiveFile: (name: string) => void;
   updateFileContent: (name: string, content: string) => void;
   setLanguage: (name: string, language: string) => void;
+  addFile: (file: CodeFile) => void;
 }
 
 export const useCodeStore = create<CodeState>((set) => ({
@@ -102,5 +103,9 @@ export const useCodeStore = create<CodeState>((set) => ({
   })),
   setLanguage: (name, language) => set(state => ({
     files: state.files.map(f => f.name === name ? { ...f, language } : f),
+  })),
+  addFile: (file) => set(state => ({
+    files: [...state.files, file],
+    activeFile: file.name,
   })),
 })); 
