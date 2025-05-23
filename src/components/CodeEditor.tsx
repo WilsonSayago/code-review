@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import MonacoEditor from "@monaco-editor/react";
+import { useRef, useEffect } from "react";
+import MonacoEditor, { useMonaco } from "@monaco-editor/react";
 // @ts-ignore
 import type { editor } from "monaco-editor";
 import type { CodeFile } from "../hooks/useCodeStore";
@@ -17,6 +17,53 @@ const DEFAULT_CODE: Record<string, string> = {
 
 const CodeEditor = ({ file, onChange }: CodeEditorProps) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const monaco = useMonaco();
+
+  // Extra: Block copy/paste/cut at DOM level
+  useEffect(() => {
+    const editorEl = document.querySelector('.monaco-editor');
+    if (!editorEl) return;
+    const blockEvent = (e: Event) => e.preventDefault();
+    editorEl.addEventListener('copy', blockEvent);
+    editorEl.addEventListener('paste', blockEvent);
+    editorEl.addEventListener('cut', blockEvent);
+    return () => {
+      editorEl.removeEventListener('copy', blockEvent);
+      editorEl.removeEventListener('paste', blockEvent);
+      editorEl.removeEventListener('cut', blockEvent);
+    };
+  }, [file.name]);
+
+  const handleEditorMount = (editor: editor.IStandaloneCodeEditor) => {
+    editorRef.current = editor;
+    if (monaco) {
+      // Disable copy, paste, cut via keyboard shortcuts
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, () => {});
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, () => {});
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyX, () => {});
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Insert, () => {});
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Insert, () => {});
+    }
+    // Disable context menu
+    editor.updateOptions({ contextmenu: false });
+    editor.onContextMenu((e) => {
+      e.event.preventDefault();
+    });
+    // Block copy/paste/cut via onKeyDown
+    editor.onKeyDown((e) => {
+      const key = e.browserEvent.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && ["c", "v", "x", "a"].includes(key)) {
+        e.preventDefault();
+      }
+    });
+    // Block copy/paste/cut via onKeyUp
+    editor.onKeyUp((e) => {
+      const key = e.browserEvent.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && ["c", "v", "x", "a"].includes(key)) {
+        e.preventDefault();
+      }
+    });
+  };
 
   return (
     <div className="border rounded overflow-hidden" style={{ height: 350 }}>
@@ -25,10 +72,8 @@ const CodeEditor = ({ file, onChange }: CodeEditorProps) => {
         language={file.language}
         value={file.content}
         theme="vs-dark"
-        options={{ fontSize: 14, minimap: { enabled: false } }}
-        onMount={(editor) => {
-          editorRef.current = editor;
-        }}
+        options={{ fontSize: 14, minimap: { enabled: false }, contextmenu: false }}
+        onMount={handleEditorMount}
         onChange={(value) => onChange(value || "")}
       />
     </div>
