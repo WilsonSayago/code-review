@@ -58,6 +58,23 @@ const FILES_BY_LANGUAGE: Record<string, CodeFile[]> = {
       content: `# JavaScript Example\n\nThis is a simple JavaScript project.`,
     },
   ],
+  typescript: [
+    {
+      name: "main.ts",
+      language: "typescript",
+      content: `function hello(name: string): void {\n  console.log(\`Hello, \\${name}!\`);\n}\n\nhello(\"world\");`,
+    },
+    {
+      name: "utils.ts",
+      language: "typescript",
+      content: `export function add(a: number, b: number): number {\n  return a + b;\n}`,
+    },
+    {
+      name: "README.md",
+      language: "markdown",
+      content: `# TypeScript Example\n\nThis is a simple TypeScript project.`,
+    },
+  ],
 };
 
 interface CodeState {

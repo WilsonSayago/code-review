@@ -2,6 +2,7 @@ import * as React from "react";
 
 const LANGUAGES = [
   { label: "JavaScript", value: "javascript" },
+  { label: "TypeScript", value: "typescript" },
   { label: "Java", value: "java" },
   { label: "Go", value: "go" },
 ];
