@@ -63,16 +63,18 @@ const CodeEditor = ({ file, onChange }: CodeEditorProps) => {
         e.preventDefault();
       }
     });
+    // Add extra vertical padding inside the editor
+    editor.updateOptions({ padding: { top: 20, bottom: 20 } });
   };
 
   return (
-    <div className="border rounded overflow-hidden" style={{ height: 350 }}>
+    <div className="border rounded overflow-hidden h-full">
       <MonacoEditor
         height="100%"
         language={file.language}
         value={file.content}
         theme="vs-dark"
-        options={{ fontSize: 14, minimap: { enabled: false }, contextmenu: false }}
+        options={{ fontSize: 14, minimap: { enabled: false }, contextmenu: false, padding: { top: 20, bottom: 20 } }}
         onMount={handleEditorMount}
         onChange={(value) => onChange(value || "")}
       />
