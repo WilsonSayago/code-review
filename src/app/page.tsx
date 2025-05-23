@@ -4,12 +4,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LanguageSelector from "../components/LanguageSelector";
 import CodeEditor from "../components/CodeEditor";
-import ThemeToggle from "../components/ThemeToggle";
-import RoleToggle from "../components/RoleToggle";
 import { useCodeStore } from "../hooks/useCodeStore";
 import FileExplorer from "@/components/FileExplorer";
-
-const DEFAULT_LANGUAGE = "javascript";
 
 export default function Home() {
   const { files, activeFile, setActiveFile, updateFileContent, mainLanguage, setMainLanguage } = useCodeStore();
@@ -37,10 +33,6 @@ export default function Home() {
             <FileExplorer files={files} activeFile={activeFile} onSelect={setActiveFile} />
           </aside>
           <section className="flex flex-col gap-4 flex-1">
-            {/* <div className="flex items-center gap-3 mb-2">
-              <RoleToggle />
-              <ThemeToggle />
-            </div> */}
             <div className="bg-white/90 dark:bg-zinc-900/90 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-800 p-2 md:p-4 flex-1 flex flex-col min-h-[420px]">
               <CodeEditor file={file} onChange={content => updateFileContent(file.name, content)} />
             </div>

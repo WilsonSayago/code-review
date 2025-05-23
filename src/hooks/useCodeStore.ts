@@ -70,7 +70,7 @@ interface CodeState {
   setLanguage: (name: string, language: string) => void;
 }
 
-export const useCodeStore = create<CodeState>((set, get) => ({
+export const useCodeStore = create<CodeState>((set) => ({
   mainLanguage: "go",
   files: FILES_BY_LANGUAGE["go"],
   activeFile: FILES_BY_LANGUAGE["go"][0].name,
