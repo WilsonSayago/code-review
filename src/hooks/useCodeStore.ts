@@ -62,7 +62,7 @@ const FILES_BY_LANGUAGE: Record<string, CodeFile[]> = {
     {
       name: "main.ts",
       language: "typescript",
-      content: `function hello(name: string): void {\n  console.log(\`Hello, \\${name}!\`);\n}\n\nhello(\"world\");`,
+      content: `function hello(name: string): void {\n  console.log(\`Hello, There!\`);\n}\n\nhello(\"world\");`,
     },
     {
       name: "utils.ts",
