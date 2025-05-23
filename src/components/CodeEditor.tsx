@@ -1,13 +1,12 @@
 import { useRef } from "react";
-import MonacoEditor, { OnMount } from "@monaco-editor/react";
-
+import MonacoEditor from "@monaco-editor/react";
 // @ts-ignore
 import type { editor } from "monaco-editor";
+import type { CodeFile } from "../hooks/useCodeStore";
 
 type CodeEditorProps = {
-  language: string;
-  code: string;
-  onChange: (code: string) => void;
+  file: CodeFile;
+  onChange: (content: string) => void;
 };
 
 const DEFAULT_CODE: Record<string, string> = {
@@ -16,15 +15,15 @@ const DEFAULT_CODE: Record<string, string> = {
   go: `package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello, world!\")\n}`,
 };
 
-const CodeEditor = ({ language, code, onChange }: CodeEditorProps) => {
+const CodeEditor = ({ file, onChange }: CodeEditorProps) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
   return (
     <div className="border rounded overflow-hidden" style={{ height: 350 }}>
       <MonacoEditor
         height="100%"
-        language={language}
-        value={code}
+        language={file.language}
+        value={file.content}
         theme="vs-dark"
         options={{ fontSize: 14, minimap: { enabled: false } }}
         onMount={(editor) => {
